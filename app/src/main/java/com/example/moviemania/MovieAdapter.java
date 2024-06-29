@@ -1,6 +1,8 @@
 package com.example.moviemania;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -41,7 +44,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.rating.setText(movie.getRating().toString());
         holder.overview.setText(movie.getOverview());
         Glide.with(context).load(movie.getPoster()).into(holder.imageView);
+        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailActivity.class);
 
+                Bundle bundle = new Bundle();
+                bundle.putString("title", movie.getTitle());
+                bundle.putString("overview", movie.getOverview());
+                bundle.putString("poster", movie.getPoster());
+                bundle.putDouble("rating", movie.getRating());
+
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
     }
 
 
@@ -57,6 +74,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public class MovieViewHolder extends RecyclerView.ViewHolder{
         ImageView imageView;
         TextView title, rating, overview;
+        ConstraintLayout constraintLayout;
 
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +82,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             title = itemView.findViewById(R.id.title_tv);
             rating = itemView.findViewById(R.id.rating);
             overview = itemView.findViewById(R.id.overview_tv);
+            constraintLayout = itemView.findViewById(R.id.main_layout);
         }
     }
 }

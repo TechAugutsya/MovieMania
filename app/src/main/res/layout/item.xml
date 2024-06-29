@@ -17,6 +17,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:background="#F6E8E8"
             android:layout_height="match_parent">
 
             <ImageView
@@ -64,6 +65,7 @@
                 android:layout_marginTop="8dp"
                 android:inputType="textMultiLine"
                 android:maxLines="3"
+                android:textColor="#273233"
                 android:text="overview"
                 android:textSize="15sp"
                 app:layout_constraintStart_toEndOf="@+id/imageview"

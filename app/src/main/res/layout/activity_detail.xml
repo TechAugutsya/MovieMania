@@ -54,6 +54,7 @@
         android:layout_marginTop="16dp"
         android:text="description"
         android:textSize="18sp"
+        android:textColor="#223335"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mRating" />
 </androidx.constraintlayout.widget.ConstraintLayout>

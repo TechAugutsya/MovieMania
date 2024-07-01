@@ -1,6 +1,7 @@
 package com.example.moviemania;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private List<Movie> movieList;
     private MovieAdapter movieAdapter;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchMovies() {
         String url = "https://moviefile.onrender.com/movies";
+        Log.d(TAG, "Fetching movies from URL: " + url);
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                movieList.clear(); // Clear the list to avoid duplications
+                Log.d(TAG, "Response received");
+                movieList.clear();
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject movie = response.getJSONObject(i);
@@ -62,20 +66,26 @@ public class MainActivity extends AppCompatActivity {
                         Movie movies = new Movie(title, poster, overview, rating);
                         movieList.add(movies);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "Error parsing movie data", e);
                     }
                 }
-                movieAdapter.notifyDataSetChanged(); // Notify the adapter of data changes
+                movieAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // Ensure that a non-null string is passed to the Toast
                 String errorMessage = error.getMessage() != null ? error.getMessage() : "An error occurred";
+                Log.e(TAG, "Error fetching movies: " + errorMessage);
                 Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
 
         requestQueue.add(jsonArrayRequest);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

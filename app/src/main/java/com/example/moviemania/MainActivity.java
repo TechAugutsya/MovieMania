@@ -74,7 +74,15 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                String errorMessage = error.getMessage() != null ? error.getMessage() : "An error occurred";
+                String errorMessage;
+                if (error.networkResponse != null) {
+                    errorMessage = "Status Code: " + error.networkResponse.statusCode;
+                    Log.e(TAG, "Error response data: " + new String(error.networkResponse.data));
+                } else if (error.getCause() != null) {
+                    errorMessage = error.getCause().getMessage();
+                } else {
+                    errorMessage = "Unknown error";
+                }
                 Log.e(TAG, "Error fetching movies: " + errorMessage);
                 Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
